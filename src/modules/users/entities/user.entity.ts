@@ -4,37 +4,35 @@ import { BaseEntity } from '@/common/abstractions/base.entity'
 import { Gender } from '../enums/gender'
 
 @Entity('users')
-@Unique(['id', 'username'])
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column()
+    @Column({ type: 'text' })
     username: string
 
-    @Column({ name: 'email', type: 'varchar', unique: true })
+    @Column({ type: 'text' })
     email: string
 
-    @Column({ name: 'password', type: 'varchar' })
+    @Column({ type: 'text' })
     password: string
 
-    @Column({ name: 'avatar', type: 'varchar', length: 255 })
+    @Column({ type: 'text' })
     avatar: string
 
-    @Column({ name: 'dob', type: 'date' })
+    @Column({ type: 'text', nullable: true })
     dob: string
 
     @Column({
-        name: 'gender',
         type: 'enum',
         enum: Gender,
         default: Gender.secret,
     })
     gender: Gender
 
-    @Column({ name: 'preferredGames', type: 'text' })
+    @Column({ type: 'text', nullable: true })
     preferredGames: string
 
-    @Column({ name: 'role', type: 'varchar', length: 50 })
+    @Column({ type: 'text' })
     role: string
 }

@@ -1,14 +1,16 @@
 import { FindOneOptions, Repository } from 'typeorm'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export abstract class BaseService<T> {
     protected constructor(protected readonly repository: Repository<T>) {}
 
-    async create(entity: T): Promise<T> {
-        return await this.repository.save(entity)
+    async create(entity: Partial<T>): Promise<T> {
+        return await this.repository.save(entity as T)
     }
 
-    async findOne(options: FindOneOptions<T>): Promise<T> {
+    async findOne(options: FindOneOptions<T>): Promise<T | null> {
         return this.repository.findOne(options)
     }
 
@@ -19,8 +21,8 @@ export abstract class BaseService<T> {
     async update(
         id: number,
         options: FindOneOptions<T>,
-        entity: T,
-    ): Promise<T> {
+        entity: Partial<T>,
+    ): Promise<T | null> {
         await this.repository.update(id, entity as QueryDeepPartialEntity<T>)
         return this.findOne(options)
     }

@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    HttpCode,
+    HttpStatus,
+} from '@nestjs/common'
+import { AuthService } from './services/auth.service'
+import { LoginDto } from './dto/login.dto'
+import { RegisterUserDto } from '../users/dto/register-user.dto'
+import { BaseResponse } from '../../common/dtos/base-response.dto'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+    constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
-  }
+    @Post('login')
+    @HttpCode(HttpStatus.OK)
+    async login(@Body() dto: LoginDto) {
+        const logined = await this.authService.login(dto)
+        return new BaseResponse(true, 'Login successfully!', logined)
+    }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+    @Post('register')
+    @HttpCode(HttpStatus.CREATED)
+    async register(@Body() dto: RegisterUserDto) {
+        const registered = await this.authService.register(dto)
+        return new BaseResponse(
+            true,
+            'Register new account successfully!',
+            registered,
+        )
+    }
 }
