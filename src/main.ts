@@ -12,11 +12,11 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule)
 
     UseInterceptors(ClassSerializerInterceptor)
-    app.enableCors({
-        credentials: true,
-        origin: process.env.FRONTEND_URL,
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    })
+    // app.enableCors({
+    //     credentials: true,
+    //     origin: process.env.FRONTEND_URL,
+    //     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    // })
     app.useGlobalPipes(
         new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
     )
